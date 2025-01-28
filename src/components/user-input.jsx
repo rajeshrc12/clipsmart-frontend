@@ -5,6 +5,8 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "./ui/textarea";
+import { useSendVideoDataMutation } from "@/services/videoApi";
 
 // YouTube URL regex pattern
 const youtubeUrlRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/(watch\?v=|playlist\?list=)|youtu\.be\/)[\w-]{11,}$/;
@@ -16,8 +18,6 @@ const FormSchema = z.object({
     .min(2, "Prompt must be at least 2 characters.")
     .max(200, "Prompt must not exceed 200 characters.")
     .regex(/^[a-zA-Z0-9\s]+$/, "Prompt must contain only letters, numbers, and spaces."),
-  youtube_api_key: z.string().min(1, "YouTube API Key is required."),
-  gemini_api_key: z.string().min(1, "Gemini API Key is required."),
 });
 
 const UserInput = () => {
@@ -26,8 +26,6 @@ const UserInput = () => {
     defaultValues: {
       url: "",
       prompt: "",
-      youtube_api_key: "",
-      gemini_api_key: "",
     },
   });
 
@@ -35,13 +33,22 @@ const UserInput = () => {
   const { errors } = formState;
 
   // Get the first error key (field name) based on the form field order
-  const fieldOrder = ["url", "prompt", "gemini_api_key", "youtube_api_key"];
+  const fieldOrder = ["url", "prompt"];
   const firstErrorKey = fieldOrder.find((key) => errors[key]);
   const firstErrorMessage = firstErrorKey ? errors[firstErrorKey]?.message : null;
-
+  const [sendVideoData, { isLoading, error, data }] = useSendVideoDataMutation(); // RTK Query mutation hook
+  console.log(data);
   const onSubmit = (data) => {
     console.log("Form Data:", data);
-    // Handle form submission here
+    // Dispatch the RTK Query mutation to send URL and prompt to the backend
+    sendVideoData(data)
+      .then((response) => {
+        console.log("Backend Response:", response);
+        // Optionally, handle any success actions or Redux state updates here
+      })
+      .catch((err) => {
+        console.error("Error:", err);
+      });
   };
 
   return (
@@ -67,37 +74,16 @@ const UserInput = () => {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input placeholder="Enter User Prompt" {...field} />
+                  <Textarea placeholder="Enter User Prompt" {...field} />
                 </FormControl>
                 {firstErrorKey === "prompt" && <FormMessage>{firstErrorMessage}</FormMessage>}
               </FormItem>
             )}
           />
-          <FormField
-            control={control}
-            name="gemini_api_key"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input placeholder="Gemini API Key" {...field} />
-                </FormControl>
-                {firstErrorKey === "gemini_api_key" && <FormMessage>{firstErrorMessage}</FormMessage>}
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={control}
-            name="youtube_api_key"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input placeholder="YouTube API Key" {...field} />
-                </FormControl>
-                {firstErrorKey === "youtube_api_key" && <FormMessage>{firstErrorMessage}</FormMessage>}
-              </FormItem>
-            )}
-          />
-          <Button type="submit">Generate</Button>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? "Processing..." : "Generate"}
+          </Button>
+          {error && <div className="text-red-500">{error.message}</div>}
         </form>
       </Form>
     </div>

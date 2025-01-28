@@ -2,8 +2,32 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux"; // Import useDispatch
+import { setUser } from "@/features/userSlice";
+
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch(); // Initialize dispatch
+
+  const handleLoginSuccess = (credentialResponse) => {
+    try {
+      const decodedToken = jwtDecode(credentialResponse.credential);
+
+      // Dispatch the decoded data to Redux
+      dispatch(
+        setUser({
+          email: decodedToken.email,
+          name: decodedToken.name,
+          img_url: decodedToken.picture,
+        })
+      );
+
+      navigate("/"); // Redirect to home or other page
+    } catch (e) {
+      alert("Error decoding the token", e);
+    }
+  };
+
   return (
     <div className="flex h-screen w-full justify-center items-center">
       <Card className="w-[350px]">
@@ -15,10 +39,7 @@ const Login = () => {
         <CardContent className="flex w-full justify-center">
           <GoogleLogin
             className="w-full"
-            onSuccess={(credentialResponse) => {
-              jwtDecode(credentialResponse.credential);
-              navigate("/");
-            }}
+            onSuccess={handleLoginSuccess} // Use the handleLoginSuccess function
             onError={() => {
               alert("Login Failed");
             }}
@@ -29,4 +50,5 @@ const Login = () => {
     </div>
   );
 };
+
 export default Login;
