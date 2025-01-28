@@ -1,7 +1,9 @@
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router";
 const Login = () => {
+  const navigate = useNavigate();
   return (
     <div className="flex h-screen w-full justify-center items-center">
       <Card className="w-[350px]">
@@ -14,8 +16,8 @@ const Login = () => {
           <GoogleLogin
             className="w-full"
             onSuccess={(credentialResponse) => {
-              const result = jwtDecode(credentialResponse.credential);
-              console.log(result);
+              jwtDecode(credentialResponse.credential);
+              navigate("/");
             }}
             onError={() => {
               alert("Login Failed");

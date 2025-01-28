@@ -10,6 +10,21 @@
 body{
   margin: 0;
 }
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #dadada;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
