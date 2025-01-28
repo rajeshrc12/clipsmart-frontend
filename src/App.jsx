@@ -17,12 +17,7 @@ function App() {
     fetchData();
   }, []);
 
-  return (
-    <div>
-      <h1>Hello from React!</h1>
-      <p>Backend Message: {message}</p>
-    </div>
-  );
+  return <div className="">{message}</div>;
 }
 
 export default App;
