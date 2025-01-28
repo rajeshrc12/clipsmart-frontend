@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axiosInstance from "./api/axios";
+import { Button } from "./components/ui/button";
 
 function App() {
   const [message, setMessage] = useState("");
@@ -17,7 +18,11 @@ function App() {
     fetchData();
   }, []);
 
-  return <div className="">{message}</div>;
+  return (
+    <div className="">
+      <Button>{message}</Button>
+    </div>
+  );
 }
 
 export default App;
