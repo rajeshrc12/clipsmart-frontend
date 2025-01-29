@@ -7,12 +7,14 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "@/component
 import { Input } from "@/components/ui/input";
 import { Textarea } from "./ui/textarea";
 import { useSendVideoDataMutation } from "@/services/videoApi";
+import { useDispatch } from "react-redux";
+import { addTranscription, setEditedLink, setLoading } from "@/features/videoSlice";
 
 // YouTube URL regex pattern
 const youtubeUrlRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/(watch\?v=|playlist\?list=)|youtu\.be\/)[\w-]{11,}$/;
 
 const FormSchema = z.object({
-  url: z.string().regex(youtubeUrlRegex, "Please enter a valid YouTube URL (Video or Playlist)."),
+  prompt_link: z.string().regex(youtubeUrlRegex, "Please enter a valid YouTube URL (Video or Playlist)."),
   prompt: z
     .string()
     .min(2, "Prompt must be at least 2 characters.")
@@ -21,10 +23,11 @@ const FormSchema = z.object({
 });
 
 const UserInput = () => {
+  const dispatch = useDispatch();
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      url: "",
+      prompt_link: "",
       prompt: "",
     },
   });
@@ -33,22 +36,28 @@ const UserInput = () => {
   const { errors } = formState;
 
   // Get the first error key (field name) based on the form field order
-  const fieldOrder = ["url", "prompt"];
+  const fieldOrder = ["prompt_link", "prompt"];
   const firstErrorKey = fieldOrder.find((key) => errors[key]);
   const firstErrorMessage = firstErrorKey ? errors[firstErrorKey]?.message : null;
-  const [sendVideoData, { isLoading, error, data }] = useSendVideoDataMutation(); // RTK Query mutation hook
-  console.log(data);
-  const onSubmit = (data) => {
-    console.log("Form Data:", data);
-    // Dispatch the RTK Query mutation to send URL and prompt to the backend
-    sendVideoData(data)
-      .then((response) => {
-        console.log("Backend Response:", response);
-        // Optionally, handle any success actions or Redux state updates here
-      })
-      .catch((err) => {
-        console.error("Error:", err);
-      });
+  const [sendVideoData, { isLoading, error }] = useSendVideoDataMutation(); // RTK Query mutation hook
+
+  const onSubmit = async (data) => {
+    try {
+      console.log("Form Data:", data);
+      dispatch(setLoading(true));
+      const response = await sendVideoData(data).unwrap(); // Unwrap response for proper error handling
+      console.log("Backend Response:", response);
+
+      dispatch(setEditedLink(response.edited_link || ""));
+
+      if (Array.isArray(response.transcription)) {
+        response.transcription.forEach((text) => dispatch(addTranscription(text)));
+      }
+    } catch (err) {
+      console.error("Error:", err);
+    } finally {
+      dispatch(setLoading(false));
+    }
   };
 
   return (
@@ -58,13 +67,13 @@ const UserInput = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
           <FormField
             control={control}
-            name="url"
+            name="prompt_link"
             render={({ field }) => (
               <FormItem>
                 <FormControl>
                   <Input placeholder="Enter YouTube URL (Video or Playlist)" {...field} />
                 </FormControl>
-                {firstErrorKey === "url" && <FormMessage>{firstErrorMessage}</FormMessage>}
+                {firstErrorKey === "prompt_link" && <FormMessage>{firstErrorMessage}</FormMessage>}
               </FormItem>
             )}
           />

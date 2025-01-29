@@ -5,6 +5,7 @@ const initialState = {
   transcription: [],
   prompt_link: "", // Keep prompt_link
   edited_link: "", // Keep edited_link
+  isLoading: false,
 };
 
 const videoSlice = createSlice({
@@ -23,15 +24,19 @@ const videoSlice = createSlice({
     setEditedLink(state, action) {
       state.edited_link = action.payload;
     },
+    setLoading(state, action) {
+      state.isLoading = action.payload;
+    },
     resetVideo(state) {
       state.prompt = "";
       state.transcription = [];
       state.prompt_link = ""; // Reset prompt_link
       state.edited_link = ""; // Reset edited_link
+      state.isLoading = false;
     },
   },
 });
 
-export const { setPrompt, addTranscription, setPromptLink, setEditedLink, resetVideo } = videoSlice.actions;
+export const { setPrompt, addTranscription, setPromptLink, setEditedLink, setLoading, resetVideo } = videoSlice.actions;
 
 export default videoSlice.reducer;
