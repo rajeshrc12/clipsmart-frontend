@@ -2,7 +2,7 @@ import Navbar from "./components/navbar";
 import Transcript from "./components/transcript";
 import UserInput from "./components/user-input";
 import VideoPlayer from "./components/video-player";
-
+//App
 function App() {
   return (
     <div className="h-screen w-full flex">
