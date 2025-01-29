@@ -8,7 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "./ui/textarea";
 import { useSendVideoDataMutation } from "@/services/videoApi";
 import { useDispatch } from "react-redux";
-import {  setEditedLink, setLoading, setTranscription } from "@/features/videoSlice";
+import { setEditedLink, setLoading, setTranscription } from "@/features/videoSlice";
+import { useToast } from "@/hooks/use-toast";
 
 // YouTube URL regex pattern
 const youtubeUrlRegex = /^https:\/\/www\.youtube\.com\//;
@@ -40,7 +41,7 @@ const UserInput = () => {
   const firstErrorKey = fieldOrder.find((key) => errors[key]);
   const firstErrorMessage = firstErrorKey ? errors[firstErrorKey]?.message : null;
   const [sendVideoData, { isLoading, error }] = useSendVideoDataMutation(); // RTK Query mutation hook
-
+  const { toast } = useToast();
   const onSubmit = async (data) => {
     try {
       console.log("Form Data:", data);
@@ -50,10 +51,36 @@ const UserInput = () => {
 
       dispatch(setEditedLink(response.edited_link || ""));
 
-      if (Array.isArray(response.transcription)) {
-        dispatch(setTranscription(response.transcription))
+      if (response.transcription.length===0) {
+        toast({
+          variant: "destructive",
+          title: "Failed",
+          description: "Check url and prompt again",
+        });
+        return;
       }
+      if (Array.isArray(response.transcription)) {
+        dispatch(setTranscription(response.transcription));
+      }
+      if (response.transcription.every(trans=>trans.filtered_transcript.length===0)) {
+        toast({
+          variant: "destructive",
+          title: "Failed",
+          description: "Enter proper prompt",
+        });
+        return;
+      }
+      toast({
+        variant: "success",
+        title: "Success",
+        description: "Video and transcript generated",
+      });
     } catch (err) {
+      toast({
+        variant: "destructive",
+        title: "Failed",
+        description: "Video and transcript generation failed",
+      });
       console.error("Error:", err);
     } finally {
       dispatch(setLoading(false));
