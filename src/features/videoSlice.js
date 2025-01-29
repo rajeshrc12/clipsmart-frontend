@@ -18,6 +18,9 @@ const videoSlice = createSlice({
     addTranscription(state, action) {
       state.transcription.push(action.payload);
     },
+    setTranscription(state, action) {
+      state.transcription=action.payload;
+    },
     setPromptLink(state, action) {
       state.prompt_link = action.payload;
     },
@@ -37,6 +40,6 @@ const videoSlice = createSlice({
   },
 });
 
-export const { setPrompt, addTranscription, setPromptLink, setEditedLink, setLoading, resetVideo } = videoSlice.actions;
+export const { setPrompt, addTranscription, setPromptLink, setEditedLink, setLoading, resetVideo,setTranscription } = videoSlice.actions;
 
 export default videoSlice.reducer;

@@ -8,10 +8,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "./ui/textarea";
 import { useSendVideoDataMutation } from "@/services/videoApi";
 import { useDispatch } from "react-redux";
-import { addTranscription, setEditedLink, setLoading } from "@/features/videoSlice";
+import {  setEditedLink, setLoading, setTranscription } from "@/features/videoSlice";
 
 // YouTube URL regex pattern
-const youtubeUrlRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/(watch\?v=|playlist\?list=)|youtu\.be\/)[\w-]{11,}$/;
+const youtubeUrlRegex = /^https:\/\/www\.youtube\.com\//;
 
 const FormSchema = z.object({
   prompt_link: z.string().regex(youtubeUrlRegex, "Please enter a valid YouTube URL (Video or Playlist)."),
@@ -51,7 +51,7 @@ const UserInput = () => {
       dispatch(setEditedLink(response.edited_link || ""));
 
       if (Array.isArray(response.transcription)) {
-        response.transcription.forEach((text) => dispatch(addTranscription(text)));
+        dispatch(setTranscription(response.transcription))
       }
     } catch (err) {
       console.error("Error:", err);
