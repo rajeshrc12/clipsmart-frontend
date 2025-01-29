@@ -44,7 +44,7 @@ const Transcript = () => {
             </div>
           ))
         ) : (
-          <div>Transcription not available</div>
+          <div className="p-5 text-gray-500">Transcription will apear here</div>
         )}
       </div>
     );

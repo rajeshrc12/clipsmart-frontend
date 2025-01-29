@@ -22,11 +22,11 @@ function App() {
       <div className="flex-0 h-full">
         <Navbar />
       </div>
-      <div className="flex-1">
-        <div className="p-3">
+      <div className="flex-1 h-full">
+        <div className="p-3 h-[40%]">
           <UserInput />
         </div>
-        <div className="flex justify-center items-center">
+        <div className="flex h-[60%] justify-center items-center">
           <VideoPlayer />
         </div>
       </div>
