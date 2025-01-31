@@ -10,19 +10,17 @@ import { useSendVideoDataMutation } from "@/services/videoApi";
 import { useDispatch } from "react-redux";
 import { setEditedLink, setLoading, setTranscription } from "@/features/videoSlice";
 import { useToast } from "@/hooks/use-toast";
+import { useEffect, useState } from "react";
 
 // YouTube URL regex pattern
 const youtubeUrlRegex = /^https:\/\/www\.youtube\.com\//;
 
 const FormSchema = z.object({
   prompt_link: z.string().regex(youtubeUrlRegex, "Please enter a valid YouTube URL (Video or Playlist)."),
-  prompt: z
-    .string()
-    .min(2, "Prompt must be at least 2 characters.")
-    .max(200, "Prompt must not exceed 200 characters.")
-    .regex(/^[a-zA-Z0-9\s]+$/, "Prompt must contain only letters, numbers, and spaces."),
+  prompt: z.string().min(2, "Prompt must be at least 2 characters.").max(200, "Prompt must not exceed 200 characters."),
 });
-
+let time = 0,
+  id;
 const UserInput = () => {
   const dispatch = useDispatch();
   const form = useForm({
@@ -42,6 +40,24 @@ const UserInput = () => {
   const firstErrorMessage = firstErrorKey ? errors[firstErrorKey]?.message : null;
   const [sendVideoData, { isLoading, error }] = useSendVideoDataMutation(); // RTK Query mutation hook
   const { toast } = useToast();
+  const [timer, setTimer] = useState(0);
+  useEffect(() => {
+    if (isLoading === true) {
+      id = setInterval(() => {
+        const hours = Math.floor(time / 3600);
+        const minutes = Math.floor((time % 3600) / 60);
+        const remainingSeconds = time % 60;
+        const timeInHMS = `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(remainingSeconds).padStart(2, "0")}`;
+        setTimer(timeInHMS);
+        time++;
+      }, [1000]);
+    }
+    if (!isLoading && time !== 0) {
+      time = 0;
+      clearInterval(id);
+    }
+  }, [isLoading]);
+  console.log(isLoading, timer);
   const onSubmit = async (data) => {
     try {
       console.log("Form Data:", data);
@@ -79,7 +95,8 @@ const UserInput = () => {
         title: "Failed",
         description: "Video and transcript generation failed",
       });
-      console.error("Error:", err);
+      console.log(err.data.detail);
+      dispatch(setLoading(false));
     } finally {
       dispatch(setLoading(false));
     }
@@ -118,6 +135,7 @@ const UserInput = () => {
             {isLoading ? "Processing..." : "Generate"}
           </Button>
           {error && <div className="text-red-500">{error.message}</div>}
+          {timer !== 0 && <span className="font-bold">Time elapsed: {timer}</span>}
         </form>
       </Form>
     </div>
