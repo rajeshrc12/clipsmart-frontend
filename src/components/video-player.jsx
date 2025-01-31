@@ -28,31 +28,17 @@ const VideoPlayer = () => {
         </div>
       ) : edited_link && !error ? (
         <div className="w-full">
-          <video
-            controls
-            className="w-full h-[50vh] rounded-xl mb-3"
-            onError={() => setError(true)}
-          >
+          <video controls className="w-full h-[45vh] rounded-xl mb-3" onError={() => setError(true)}>
             <source src={edited_link} type="video/mp4" />
           </video>
           <div className="flex justify-between mt-3">
-            <Button
-            variant="outline"
-              className="px-4 py-2 rounded-md w-full "
-              onClick={handleDownload}
-            >
+            <Button variant="outline" className="px-4 py-2 rounded-md w-full " onClick={handleDownload}>
               Download
             </Button>
           </div>
         </div>
       ) : (
-        <div className="text-center text-gray-500">
-          {error ? (
-            <p>Error loading video. Please try again.</p>
-          ) : (
-            <p>Your generated video will appear here.</p>
-          )}
-        </div>
+        <div className="text-center text-gray-500">{error ? <p>Error loading video. Please try again.</p> : <p>Your generated video will appear here.</p>}</div>
       )}
     </div>
   );

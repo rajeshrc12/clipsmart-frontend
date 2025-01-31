@@ -50,8 +50,9 @@ const UserInput = () => {
       console.log("Backend Response:", response);
 
       dispatch(setEditedLink(response.edited_link || ""));
+      dispatch(setTranscription(response?.transcription || []));
 
-      if (response.transcription.length===0) {
+      if (response.transcription.length === 0) {
         toast({
           variant: "destructive",
           title: "Failed",
@@ -59,14 +60,11 @@ const UserInput = () => {
         });
         return;
       }
-      if (Array.isArray(response.transcription)) {
-        dispatch(setTranscription(response.transcription));
-      }
-      if (response.transcription.every(trans=>trans.filtered_transcript.length===0)) {
+      if (response.transcription.every((trans) => trans.filtered_transcript.length === 0)) {
         toast({
           variant: "destructive",
           title: "Failed",
-          description: "Enter proper prompt",
+          description: "No transcription available try again",
         });
         return;
       }
