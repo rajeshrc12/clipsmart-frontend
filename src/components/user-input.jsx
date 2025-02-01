@@ -9,8 +9,8 @@ import { Textarea } from "./ui/textarea";
 import { useSendVideoDataMutation } from "@/services/videoApi";
 import { useDispatch } from "react-redux";
 import { setEditedLink, setLoading, setTranscription } from "@/features/videoSlice";
-import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
+import { setAlert } from "@/features/userSlice";
 
 // YouTube URL regex pattern
 const youtubeUrlRegex = /^https:\/\/www\.youtube\.com\//;
@@ -39,7 +39,6 @@ const UserInput = () => {
   const firstErrorKey = fieldOrder.find((key) => errors[key]);
   const firstErrorMessage = firstErrorKey ? errors[firstErrorKey]?.message : null;
   const [sendVideoData, { isLoading, error }] = useSendVideoDataMutation(); // RTK Query mutation hook
-  const { toast } = useToast();
   const [timer, setTimer] = useState(0);
   useEffect(() => {
     if (isLoading === true) {
@@ -63,41 +62,20 @@ const UserInput = () => {
       console.log("Form Data:", data);
       dispatch(setLoading(true));
       const response = await sendVideoData(data).unwrap(); // Unwrap response for proper error handling
+      console.clear();
       console.log("Backend Response:", response);
-
-      dispatch(setEditedLink(response.edited_link || ""));
-      dispatch(setTranscription(response?.transcription || []));
-
-      if (response.transcription.length === 0) {
-        toast({
-          variant: "destructive",
-          title: "Failed",
-          description: "Check url and prompt again",
-        });
+      if (response.status_code === 404) {
+        dispatch(setAlert({ title: "Error", message: response.message }));
         return;
       }
-      if (response.transcription.every((trans) => trans.filtered_transcript.length === 0)) {
-        toast({
-          variant: "destructive",
-          title: "Failed",
-          description: "No transcription available try again",
-        });
-        return;
-      }
-      toast({
-        variant: "success",
-        title: "Success",
-        description: "Video and transcript generated",
-      });
-    } catch (err) {
-      toast({
-        variant: "destructive",
-        title: "Failed",
-        description: "Video and transcript generation failed",
-      });
-      console.log(err.data.detail);
+      dispatch(setEditedLink(response.video_link || ""));
+      dispatch(setTranscription([response]));
+    } catch {
+      dispatch(setAlert({ title: "Error", message: "Video generation failed try again" }));
+      clearInterval(id);
       dispatch(setLoading(false));
     } finally {
+      clearInterval(id);
       dispatch(setLoading(false));
     }
   };

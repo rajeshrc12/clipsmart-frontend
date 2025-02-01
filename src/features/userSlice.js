@@ -4,6 +4,7 @@ const initialState = {
   email: "",
   name: "",
   img_url: "",
+  alert: false,
 };
 
 const userSlice = createSlice({
@@ -15,14 +16,18 @@ const userSlice = createSlice({
       state.name = action.payload.name || state.name;
       state.img_url = action.payload.img_url || state.img_url;
     },
+    setAlert(state, action) {
+      state.alert = action.payload;
+    },
     resetUser(state) {
       state.email = "";
       state.name = "";
       state.img_url = "";
+      state.alert = false;
     },
   },
 });
 
-export const { setUser, resetUser } = userSlice.actions;
+export const { setUser, resetUser, setAlert } = userSlice.actions;
 
 export default userSlice.reducer;

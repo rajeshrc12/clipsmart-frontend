@@ -4,13 +4,18 @@ import Transcript from "./components/transcript";
 import UserInput from "./components/user-input";
 import VideoPlayer from "./components/video-player";
 import { useNavigate } from "react-router";
-import { setUser } from "./features/userSlice";
-import { useDispatch } from "react-redux";
+import { setAlert, setUser } from "./features/userSlice";
+import { useDispatch, useSelector } from "react-redux";
 import { Toaster } from "@/components/ui/toaster";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { Button } from "./components/ui/button";
+import { AlertCircle } from "lucide-react";
+
 //App
 function App() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const alert = useSelector((state) => state.user.alert);
   useEffect(() => {
     const user = sessionStorage.getItem("user");
     if (user) {
@@ -33,7 +38,27 @@ function App() {
       <div className="flex-1">
         <Transcript />
       </div>
-      <Toaster />
+      {!!alert && (
+        <AlertDialog open={!!alert}>
+          <AlertDialogContent className="w-96 h-72">
+            <AlertDialogHeader className={"!text-center"}>
+              <AlertDialogTitle className="!text-4xl !flex flex-col items-center gap-3">
+                <div>
+                  <AlertCircle size={50} />
+                </div>
+                <div>{alert.title.toUpperCase()}!</div>
+              </AlertDialogTitle>
+              <AlertDialogDescription className="text-xl text-black font-semibold">{alert.message}</AlertDialogDescription>
+              <div className="text-black font-thin">Please try again with different url or prompt</div>
+            </AlertDialogHeader>
+            <AlertDialogFooter className={"!flex !justify-center"}>
+              <Button className=" text-white" onClick={() => dispatch(setAlert(false))}>
+                OK
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
     </div>
   );
 }

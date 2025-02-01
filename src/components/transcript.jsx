@@ -32,14 +32,16 @@ const Transcript = () => {
                 {index + 1}. {video.title}
               </div>
               <div className="">
-                {video.filtered_transcript.length>0?video.filtered_transcript.map((transcript) => (
-                  <div className="border-b p-2" key={transcript.start_time}>
-                    <div className="font-bold">
-                      {transcript.start_time} - {transcript.end_time}
-                    </div>
-                    <div>{transcript.text}</div>
-                  </div>
-                )):"No transcription available"}
+                {video.transcription.length > 0
+                  ? video.transcription.map((transcript) => (
+                      <div className="border-b p-2" key={transcript.start_time}>
+                        <div className="font-bold">
+                          {transcript.start_time} - {transcript.end_time}
+                        </div>
+                        <div>{transcript.text}</div>
+                      </div>
+                    ))
+                  : "No transcription available"}
               </div>
             </div>
           ))
