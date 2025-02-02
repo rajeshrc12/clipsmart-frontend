@@ -1,15 +1,11 @@
 import { useEffect } from "react";
-import Navbar from "./components/navbar";
-import Transcript from "./components/transcript";
-import UserInput from "./components/user-input";
-import VideoPlayer from "./components/video-player";
-import { useNavigate } from "react-router";
+import { Outlet, useNavigate } from "react-router";
 import { setAlert, setUser } from "./features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { Toaster } from "@/components/ui/toaster";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Button } from "./components/ui/button";
 import { AlertCircle } from "lucide-react";
+import Stepper from "./components/stepper";
 
 //App
 function App() {
@@ -23,20 +19,12 @@ function App() {
     } else navigate("/login");
   }, []);
   return (
-    <div className="h-screen w-full flex">
-      <div className="flex-0 h-full">
-        <Navbar />
-      </div>
-      <div className="flex-1 h-full">
-        <div className="p-3 h-[40%]">
-          <UserInput />
+    <div className="h-screen w-full flex justify-center">
+      <div className="flex flex-col w-full max-w-[60vw] pt-10 gap-20">
+        <Stepper />
+        <div className="mt-[25px] flex justify-center items-center">
+          <Outlet />
         </div>
-        <div className="flex h-[60%] justify-center items-center">
-          <VideoPlayer />
-        </div>
-      </div>
-      <div className="flex-1">
-        <Transcript />
       </div>
       {!!alert && (
         <AlertDialog open={!!alert}>

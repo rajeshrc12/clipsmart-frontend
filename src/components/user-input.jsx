@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "./ui/textarea";
 import { useSendVideoDataMutation } from "@/services/videoApi";
@@ -34,10 +34,6 @@ const UserInput = () => {
   const { handleSubmit, control, formState } = form;
   const { errors } = formState;
 
-  // Get the first error key (field name) based on the form field order
-  const fieldOrder = ["prompt_link", "prompt"];
-  const firstErrorKey = fieldOrder.find((key) => errors[key]);
-  const firstErrorMessage = firstErrorKey ? errors[firstErrorKey]?.message : null;
   const [sendVideoData, { isLoading, error }] = useSendVideoDataMutation(); // RTK Query mutation hook
   const [timer, setTimer] = useState(0);
   useEffect(() => {
@@ -49,14 +45,14 @@ const UserInput = () => {
         const timeInHMS = `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(remainingSeconds).padStart(2, "0")}`;
         setTimer(timeInHMS);
         time++;
-      }, [1000]);
+      }, 1000);
     }
     if (!isLoading && time !== 0) {
       time = 0;
       clearInterval(id);
     }
   }, [isLoading]);
-  console.log(isLoading, timer);
+
   const onSubmit = async (data) => {
     try {
       console.log("Form Data:", data);
@@ -71,7 +67,7 @@ const UserInput = () => {
       dispatch(setEditedLink(response.video_link || ""));
       dispatch(setTranscription([response]));
     } catch {
-      dispatch(setAlert({ title: "Error", message: "Video generation failed try again" }));
+      dispatch(setAlert({ title: "Error", message: "Video generation failed. Try again." }));
       clearInterval(id);
       dispatch(setLoading(false));
     } finally {
@@ -81,31 +77,33 @@ const UserInput = () => {
   };
 
   return (
-    <div className="flex flex-col shadow-lg bg-white rounded p-3 gap-5">
-      <div className="font-bold">User Input</div>
+    <div className="flex flex-col w-[500px] p-3 gap-5">
       <Form {...form}>
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
           <FormField
             control={control}
             name="prompt_link"
             render={({ field }) => (
               <FormItem>
+                <FormLabel className="text-black">YouTube URL</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter YouTube URL (Video or Playlist)" {...field} />
+                  <Input placeholder="Type here..." {...field} />
                 </FormControl>
-                {firstErrorKey === "prompt_link" && <FormMessage>{firstErrorMessage}</FormMessage>}
+                <FormMessage>{errors.prompt_link?.message}</FormMessage>
               </FormItem>
             )}
           />
+
           <FormField
             control={control}
             name="prompt"
             render={({ field }) => (
               <FormItem>
+                <FormLabel className="text-black">Prompt</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Enter User Prompt" {...field} />
+                  <Textarea rows={5} placeholder="Type here..." {...field} />
                 </FormControl>
-                {firstErrorKey === "prompt" && <FormMessage>{firstErrorMessage}</FormMessage>}
+                <FormMessage>{errors.prompt?.message}</FormMessage>
               </FormItem>
             )}
           />

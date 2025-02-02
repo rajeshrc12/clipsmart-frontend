@@ -6,6 +6,8 @@ import "./index.css";
 import App from "./App.jsx";
 import Login from "./pages/login";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { AdjustTime } from "./components/adjust-time";
+import UserInput from "./components/user-input";
 
 // Initialize the app with Redux store and Google OAuth provider
 createRoot(document.getElementById("root")).render(
@@ -13,7 +15,10 @@ createRoot(document.getElementById("root")).render(
     <Provider store={store}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<App />} />
+          <Route path="/" element={<App />}>
+            <Route path="/" element={<UserInput />} />
+            <Route path="/adjust-time" element={<AdjustTime />} />
+          </Route>
           <Route path="/login" element={<Login />} />
         </Routes>
       </BrowserRouter>
