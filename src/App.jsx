@@ -6,8 +6,7 @@ import VideoPlayer from "./components/video-player";
 import { useNavigate } from "react-router";
 import { setAlert, setUser } from "./features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { Toaster } from "@/components/ui/toaster";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Button } from "./components/ui/button";
 import { AlertCircle } from "lucide-react";
 

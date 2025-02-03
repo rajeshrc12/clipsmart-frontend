@@ -1,11 +1,9 @@
 import { useSelector } from "react-redux";
 import { Skeleton } from "./ui/skeleton";
-import { useState } from "react";
 import { Button } from "./ui/button";
 
 const VideoPlayer = () => {
   const { edited_link, isLoading } = useSelector((state) => state.video);
-  const [error, setError] = useState(false);
 
   const handleDownload = () => {
     if (edited_link) {
@@ -26,9 +24,9 @@ const VideoPlayer = () => {
             <Skeleton className="h-4 w-[200px]" />
           </div>
         </div>
-      ) : edited_link && !error ? (
+      ) : edited_link != "" ? (
         <div className="w-full">
-          <video controls className="w-full h-[45vh] rounded-xl mb-3" onError={() => setError(true)}>
+          <video controls className="w-full h-[45vh] rounded-xl mb-3">
             <source src={edited_link} type="video/mp4" />
           </video>
           <div className="flex justify-between mt-3">
@@ -38,7 +36,9 @@ const VideoPlayer = () => {
           </div>
         </div>
       ) : (
-        <div className="text-center text-gray-500">{error ? <p>Error loading video. Please try again.</p> : <p>Your generated video will appear here.</p>}</div>
+        <div className="text-center text-gray-500">
+          <p>Your generated video will appear here.</p>
+        </div>
       )}
     </div>
   );

@@ -64,12 +64,16 @@ const UserInput = () => {
       const response = await sendVideoData(data).unwrap(); // Unwrap response for proper error handling
       console.clear();
       console.log("Backend Response:", response);
-      if (response.status_code === 404) {
+      if (response.status_code === 404 || response.status_code === 500) {
         dispatch(setAlert({ title: "Error", message: response.message }));
         return;
       }
-      dispatch(setEditedLink(response.video_link || ""));
-      dispatch(setTranscription([response]));
+      if (response?.video_link) {
+        dispatch(setEditedLink(response.video_link || ""));
+      }
+      if (response?.video_details) {
+        dispatch(setTranscription(response.video_details || []));
+      }
     } catch {
       dispatch(setAlert({ title: "Error", message: "Video generation failed try again" }));
       clearInterval(id);
