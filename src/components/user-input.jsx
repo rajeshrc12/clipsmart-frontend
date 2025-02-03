@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import { setEditedLink, setLoading, setTranscription } from "@/features/videoSlice";
 import { useEffect, useState } from "react";
 import { setAlert } from "@/features/userSlice";
+import { useNavigate } from "react-router";
 
 // YouTube URL regex pattern
 const youtubeUrlRegex = /^https:\/\/www\.youtube\.com\//;
@@ -22,6 +23,7 @@ const FormSchema = z.object({
 let time = 0,
   id;
 const UserInput = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const form = useForm({
     resolver: zodResolver(FormSchema),
@@ -55,24 +57,25 @@ const UserInput = () => {
 
   const onSubmit = async (data) => {
     try {
-      console.log("Form Data:", data);
-      dispatch(setLoading(true));
-      const response = await sendVideoData(data).unwrap(); // Unwrap response for proper error handling
-      console.clear();
-      console.log("Backend Response:", response);
-      if (response.status_code === 404) {
-        dispatch(setAlert({ title: "Error", message: response.message }));
-        return;
-      }
-      dispatch(setEditedLink(response.video_link || ""));
-      dispatch(setTranscription([response]));
+      navigate("/adjust-time");
+      // console.log("Form Data:", data);
+      // dispatch(setLoading(true));
+      // const response = await sendVideoData(data).unwrap(); // Unwrap response for proper error handling
+      // console.clear();
+      // console.log("Backend Response:", response);
+      // if (response.status_code === 404) {
+      //   dispatch(setAlert({ title: "Error", message: response.message }));
+      //   return;
+      // }
+      // dispatch(setEditedLink(response.video_link || ""));
+      // dispatch(setTranscription([response]));
     } catch {
-      dispatch(setAlert({ title: "Error", message: "Video generation failed. Try again." }));
-      clearInterval(id);
-      dispatch(setLoading(false));
+      // dispatch(setAlert({ title: "Error", message: "Video generation failed. Try again." }));
+      // clearInterval(id);
+      // dispatch(setLoading(false));
     } finally {
-      clearInterval(id);
-      dispatch(setLoading(false));
+      // clearInterval(id);
+      // dispatch(setLoading(false));
     }
   };
 

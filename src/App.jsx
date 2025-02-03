@@ -6,6 +6,7 @@ import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogFoo
 import { Button } from "./components/ui/button";
 import { AlertCircle } from "lucide-react";
 import Stepper from "./components/stepper";
+import VideoSlider from "./components/video-slider";
 
 //App
 function App() {
@@ -20,12 +21,14 @@ function App() {
   }, []);
   return (
     <div className="h-screen w-full flex justify-center">
+      <VideoSlider />
       <div className="flex flex-col w-full max-w-[60vw] pt-10 gap-20">
         <Stepper />
         <div className="mt-[25px] flex justify-center items-center">
           <Outlet />
         </div>
       </div>
+
       {!!alert && (
         <AlertDialog open={!!alert}>
           <AlertDialogContent className="w-96 h-72">
