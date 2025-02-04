@@ -39,7 +39,7 @@ function App() {
       </div>
       {!!alert && (
         <AlertDialog open={!!alert}>
-          <AlertDialogContent className="w-96 h-72">
+          <AlertDialogContent className="w-96 h-72 bg-inherit border-none">
             <AlertDialogHeader className={"!text-center"}>
               <AlertDialogTitle className="!text-4xl !flex flex-col items-center gap-3">
                 <div>
@@ -47,8 +47,8 @@ function App() {
                 </div>
                 <div>{alert.title.toUpperCase()}!</div>
               </AlertDialogTitle>
-              <AlertDialogDescription className="text-xl text-black font-semibold">{alert.message}</AlertDialogDescription>
-              <div className="text-black font-thin">Please try again with different url or prompt</div>
+              <AlertDialogDescription className="text-lg text-white font-semibold">{alert.message}</AlertDialogDescription>
+              <div className="font-thin">Please try again with different url or prompt</div>
             </AlertDialogHeader>
             <AlertDialogFooter className={"!flex !justify-center"}>
               <Button className=" text-white" onClick={() => dispatch(setAlert(false))}>

@@ -7,8 +7,21 @@
   line-height: 1.5;
   font-weight: 400;
 }
-body{
+body {
   margin: 0;
+  background-color: #181414;
+  color: #E0E0E0;
+  /* background-color: rgb(250, 250, 250); */
+}
+input,
+textarea {
+  background-color: #201c1c !important;
+  color: white !important;
+  border: 1px solid gray !important;
+}
+button {
+  background-color: #3c54e4 !important;
+  color: white;
 }
 
 ::-webkit-scrollbar {
@@ -88,4 +101,3 @@ body{
     @apply bg-background text-foreground;
   }
 }
-

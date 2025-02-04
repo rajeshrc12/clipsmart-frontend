@@ -11,7 +11,7 @@ const Navbar = () => {
     navigate("/login");
   };
   return (
-    <div className="flex flex-col justify-between items-center shadow-lg h-full px-3 bg-white p-5">
+    <div className="flex flex-col justify-between items-center border-r border-[#808080] h-full px-3 p-5">
       <div className="font-bold text-2xl">CS</div>
       <Popover>
         <PopoverTrigger asChild>

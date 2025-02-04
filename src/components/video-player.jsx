@@ -18,10 +18,10 @@ const VideoPlayer = () => {
     <div className="flex flex-col items-center w-full px-3 h-full">
       {isLoading ? (
         <div className="flex flex-col space-y-3 w-full h-full">
-          <Skeleton className="h-[40vh] w-full rounded-xl" />
+          <Skeleton className="h-[40vh] w-full rounded-xl bg-[#3A3434]" />
           <div className="space-y-2">
-            <Skeleton className="h-4 w-[250px]" />
-            <Skeleton className="h-4 w-[200px]" />
+            <Skeleton className="h-4 w-[250px] bg-[#3A3434]" />
+            <Skeleton className="h-4 w-[200px] bg-[#3A3434]" />
           </div>
         </div>
       ) : edited_link != "" ? (

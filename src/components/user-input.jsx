@@ -85,7 +85,7 @@ const UserInput = () => {
   };
 
   return (
-    <div className="flex flex-col shadow-lg bg-white rounded p-3 gap-5">
+    <div className="flex flex-col rounded p-3 gap-5">
       <div className="font-bold">User Input</div>
       <Form {...form}>
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
@@ -95,7 +95,7 @@ const UserInput = () => {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input placeholder="Enter YouTube URL (Video or Playlist)" {...field} />
+                  <Input autocomplete="off" placeholder="Enter YouTube URL (Video or Playlist)" {...field} />
                 </FormControl>
                 {firstErrorKey === "prompt_link" && <FormMessage>{firstErrorMessage}</FormMessage>}
               </FormItem>
