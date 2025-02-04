@@ -2,7 +2,6 @@ import Navbar from "./components/navbar";
 import Transcript from "./components/transcript";
 import UserInput from "./components/user-input";
 import VideoPlayer from "./components/video-player";
-// import { useNavigate } from "react-router";
 import { setAlert } from "./features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
