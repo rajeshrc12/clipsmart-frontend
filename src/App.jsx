@@ -1,10 +1,9 @@
-import { useEffect } from "react";
 import Navbar from "./components/navbar";
 import Transcript from "./components/transcript";
 import UserInput from "./components/user-input";
 import VideoPlayer from "./components/video-player";
-import { useNavigate } from "react-router";
-import { setAlert, setUser } from "./features/userSlice";
+// import { useNavigate } from "react-router";
+import { setAlert } from "./features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Button } from "./components/ui/button";
@@ -13,14 +12,14 @@ import { AlertCircle } from "lucide-react";
 //App
 function App() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const alert = useSelector((state) => state.user.alert);
-  useEffect(() => {
-    const user = sessionStorage.getItem("user");
-    if (user) {
-      dispatch(setUser(JSON.parse(user)));
-    } else navigate("/login");
-  }, []);
+  // useEffect(() => {
+  //   const user = sessionStorage.getItem("user");
+  //   if (user) {
+  //     dispatch(setUser(JSON.parse(user)));
+  //   } else navigate("/login");
+  // }, []);
   return (
     <div className="h-screen w-full flex">
       <div className="flex-0 h-full">
