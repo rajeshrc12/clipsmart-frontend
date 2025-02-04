@@ -2,7 +2,24 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   prompt: "",
-  transcription: [],
+  transcription: [
+    {
+      title: "React in 100 seconds",
+      video_url: "",
+      transcription: [
+        { start_time: "00:00:00", end_time: "00:00:10", text: "this is react" },
+        { start_time: "00:00:00", end_time: "00:00:10", text: "this is react" },
+      ],
+    },
+    {
+      title: "React in 200 seconds",
+      video_url: "",
+      transcription: [
+        { start_time: "00:00:00", end_time: "00:00:10", text: "this is react" },
+        { start_time: "00:00:00", end_time: "00:00:10", text: "this is react" },
+      ],
+    },
+  ],
   prompt_link: "", // Keep prompt_link
   edited_link: "", // Keep edited_link
   isLoading: false,
@@ -19,7 +36,7 @@ const videoSlice = createSlice({
       state.transcription.push(action.payload);
     },
     setTranscription(state, action) {
-      state.transcription=action.payload;
+      state.transcription = action.payload;
     },
     setPromptLink(state, action) {
       state.prompt_link = action.payload;
@@ -40,6 +57,6 @@ const videoSlice = createSlice({
   },
 });
 
-export const { setPrompt, addTranscription, setPromptLink, setEditedLink, setLoading, resetVideo,setTranscription } = videoSlice.actions;
+export const { setPrompt, addTranscription, setPromptLink, setEditedLink, setLoading, resetVideo, setTranscription } = videoSlice.actions;
 
 export default videoSlice.reducer;

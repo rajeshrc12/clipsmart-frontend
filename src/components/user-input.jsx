@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "./ui/textarea";
 import { useSendVideoDataMutation } from "@/services/videoApi";
 import { useDispatch } from "react-redux";
-import { setEditedLink, setLoading, setTranscription } from "@/features/videoSlice";
+import { setEditedLink, setLoading, setPromptLink, setTranscription } from "@/features/videoSlice";
 import { useEffect, useState } from "react";
 import { setAlert } from "@/features/userSlice";
 import { useNavigate } from "react-router";
@@ -58,6 +58,7 @@ const UserInput = () => {
   const onSubmit = async (data) => {
     try {
       navigate("/adjust-time");
+      dispatch(setPromptLink(data.prompt_link));
       // console.log("Form Data:", data);
       // dispatch(setLoading(true));
       // const response = await sendVideoData(data).unwrap(); // Unwrap response for proper error handling

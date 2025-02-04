@@ -9,16 +9,25 @@
 }
 body {
   margin: 0;
+  /* background-color: #181414; */
+  background-color: rgb(250, 250, 250);
 }
-
+input,
+textarea {
+  background-color: white !important;
+}
+/* button {
+  background-color: #3c54e4 !important;
+  color: white;
+} */
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 3px;
 }
 
 /* Track */
-::-webkit-scrollbar-track {
+/* ::-webkit-scrollbar-track {
   background: #ffffff;
-}
+} */
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
