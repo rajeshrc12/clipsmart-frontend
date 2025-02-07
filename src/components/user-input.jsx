@@ -62,7 +62,6 @@ const UserInput = () => {
       console.log("Form Data:", data);
       dispatch(setLoading(true));
       const response = await sendVideoData(data).unwrap(); // Unwrap response for proper error handling
-      console.clear();
       console.log("Backend Response:", response);
       if (response.status_code === 404 || response.status_code === 500) {
         dispatch(setAlert({ title: "Error", message: response.message }));

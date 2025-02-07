@@ -1,12 +1,12 @@
 import Navbar from "./components/navbar";
 import Transcript from "./components/transcript";
 import UserInput from "./components/user-input";
-import VideoPlayer from "./components/video-player";
 import { setAlert } from "./features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Button } from "./components/ui/button";
 import { AlertCircle } from "lucide-react";
+import YouTubePlaylistPlayer from "./components/YouTubePlaylistPlayer";
 
 //App
 function App() {
@@ -28,8 +28,8 @@ function App() {
         <div className="p-3 h-[45%]">
           <UserInput />
         </div>
-        <div className="flex h-[50%] mt-8 justify-center items-center">
-          <VideoPlayer />
+        <div className="flex h-[40%] mt-8 justify-center items-center">
+          <YouTubePlaylistPlayer />
         </div>
       </div>
       <div className="flex-1">

@@ -1,5 +1,6 @@
 import { useSelector } from "react-redux";
 import { Skeleton } from "./ui/skeleton";
+import { formatTime } from "@/utils/common";
 
 const Transcript = () => {
   const { transcription, isLoading } = useSelector((state) => state.video);
@@ -36,7 +37,7 @@ const Transcript = () => {
                   ? video.transcription.map((transcript) => (
                       <div className="border-b border-[#808080] border-l p-2" key={transcript.start_time}>
                         <div className="font-semibold">
-                          {transcript.start_time} - {transcript.end_time}
+                          {formatTime(transcript.start_time)} - {formatTime(transcript.end_time)}
                         </div>
                         <div className="text-sm">{transcript.text}</div>
                       </div>
