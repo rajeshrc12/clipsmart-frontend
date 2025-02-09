@@ -28,7 +28,7 @@ function App() {
         <div className="p-3 h-[45%]">
           <UserInput />
         </div>
-        <div className="flex h-[40%] mt-8 justify-center items-center">
+        <div className="flex h-[40%] mt-8 justify-center items-center px-6">
           <YouTubePlaylistPlayer />
         </div>
       </div>

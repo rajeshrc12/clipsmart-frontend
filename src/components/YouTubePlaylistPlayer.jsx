@@ -8,30 +8,35 @@ const YouTubePlaylistPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const playerRef = useRef(null);
 
-  // const parseISO8601Duration = (duration) => {
-  //   const [hours, minutes, seconds] = duration.split(":");
-  //   return parseInt(hours) * 3600 + parseInt(minutes) * 60 + parseInt(seconds);
-  // };
+  const parseISO8601Duration = (duration) => {
+    const [hours, minutes, seconds] = duration.split(":");
+    return parseInt(hours) * 3600 + parseInt(minutes) * 60 + parseInt(seconds);
+  };
 
   const loadVideo = () => {
-    const video = videos[currentVideoIndex];
-    const transcription = video.transcription[currentTranscriptionIndex];
-    const start_time_seconds = transcription.start;
-    const end_time_seconds = transcription.start + transcription.duration;
-
-    playerRef.current.loadVideoById({
-      videoId: video.id,
-      startSeconds: start_time_seconds,
-      endSeconds: end_time_seconds,
-    });
-
-    id = setTimeout(() => {
-      if (currentTranscriptionIndex < video.transcription.length - 1) {
-        setCurrentTranscriptionIndex(currentTranscriptionIndex + 1);
-      } else {
-        playNextVideo();
-      }
-    }, Math.ceil(end_time_seconds - start_time_seconds) * 1000);
+    if(videos[currentVideoIndex].transcription.length>0){
+      const video = videos[currentVideoIndex];
+      const transcription = video.transcription[currentTranscriptionIndex];
+      const start_time_seconds = parseISO8601Duration(transcription.start_time);
+      const end_time_seconds = parseISO8601Duration(transcription.end_time)+1;
+  
+      playerRef.current.loadVideoById({
+        videoId: video.id,
+        startSeconds: start_time_seconds,
+        endSeconds: end_time_seconds,
+      });
+  
+      id = setTimeout(() => {
+        if (currentTranscriptionIndex < video.transcription.length - 1) {
+          setCurrentTranscriptionIndex(currentTranscriptionIndex + 1);
+        } else {
+          playNextVideo();
+        }
+      }, Math.ceil(end_time_seconds - start_time_seconds) * 1000);
+    }
+    else{
+      playNextVideo();
+    }
   };
 
   const playNextVideo = () => {
