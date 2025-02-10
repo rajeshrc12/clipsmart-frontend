@@ -7,18 +7,13 @@ import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogFoo
 import { Button } from "./components/ui/button";
 import { AlertCircle } from "lucide-react";
 import YouTubePlaylistPlayer from "./components/YouTubePlaylistPlayer";
+import YoutubeEditPlaylistPlayer from "./components/YoutubeEditPlaylistPlayer";
 
 //App
 function App() {
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
   const alert = useSelector((state) => state.user.alert);
-  // useEffect(() => {
-  //   const user = sessionStorage.getItem("user");
-  //   if (user) {
-  //     dispatch(setUser(JSON.parse(user)));
-  //   } else navigate("/login");
-  // }, []);
+  const edit = useSelector((state) => state.video.edit);
   return (
     <div className="h-screen w-full flex">
       <div className="flex-0 h-full">
@@ -45,14 +40,28 @@ function App() {
                 </div>
                 <div>{alert.title.toUpperCase()}!</div>
               </AlertDialogTitle>
-              <AlertDialogDescription className="text-lg text-white font-semibold">{alert.message}</AlertDialogDescription>
+              <AlertDialogDescription className="text-lg  font-semibold">{alert.message}</AlertDialogDescription>
               <div className="font-thin">Please try again with different url or prompt</div>
             </AlertDialogHeader>
             <AlertDialogFooter className={"!flex !justify-center"}>
-              <Button className=" text-white" onClick={() => dispatch(setAlert(false))}>
+              <Button className=" " onClick={() => dispatch(setAlert(false))}>
                 OK
               </Button>
             </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
+      {!!edit && (
+        <AlertDialog open={!!edit}>
+          <AlertDialogContent className="bg-inherit border-none !max-w-[50vw]">
+            <AlertDialogHeader className={"!text-center"}>
+              <AlertDialogTitle className="!text-4xl !flex flex-col gap-3"></AlertDialogTitle>
+              <AlertDialogDescription className="">
+                <div className="w-full h-full">
+                  <YoutubeEditPlaylistPlayer />
+                </div>
+              </AlertDialogDescription>
+            </AlertDialogHeader>
           </AlertDialogContent>
         </AlertDialog>
       )}

@@ -1,9 +1,12 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Skeleton } from "./ui/skeleton";
+import { Pencil, Play } from "lucide-react";
+import { setEdit } from "@/features/videoSlice";
 // import { formatTime } from "@/utils/common";
 
 const Transcript = () => {
   const { transcription, isLoading } = useSelector((state) => state.video);
+  const dispatch = useDispatch();
   if (isLoading) {
     return (
       <div className="p-4 space-y-6">
@@ -27,17 +30,23 @@ const Transcript = () => {
     return (
       <div className="h-screen overflow-y-scroll">
         {transcription.length > 0 ? (
-          transcription.map((video, index) => (
+          transcription.map((video, videoIndex) => (
             <div key={video.id}>
               <div className="font-bold border border-[#808080] p-2 sticky top-0 left-0 bg-[#201c1c]">
-                {index + 1}. {video.title}
+                {videoIndex + 1}. {video.title}
               </div>
               <div>
                 {video.transcription.length > 0
-                  ? video.transcription.map((transcript) => (
+                  ? video.transcription.map((transcript, transcriptIndex) => (
                       <div className="border-b border-[#808080] border-l p-2" key={transcript.start_time}>
-                        <div className="font-semibold">
-                          {transcript.start_time} - {transcript.end_time}
+                        <div className="font-semibold flex justify-between">
+                          <div>
+                            {transcript.start_time} - {transcript.end_time}
+                          </div>
+                          <div className="flex gap-3 items-center">
+                            <Play size={17} />
+                            <Pencil size={17} onClick={() => dispatch(setEdit({ title: video.title, duration: video.duration, id: video.id, videoIndex, transcriptIndex, transcript }))} />
+                          </div>
                         </div>
                         <div className="text-sm">{transcript.text}</div>
                       </div>
