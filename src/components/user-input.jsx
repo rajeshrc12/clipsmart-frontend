@@ -60,6 +60,7 @@ const UserInput = () => {
   const onSubmit = async (data) => {
     try {
       console.log("Form Data:", data);
+      dispatch(setTranscription([]));
       dispatch(setLoading(true));
       const response = await sendVideoData(data).unwrap(); // Unwrap response for proper error handling
       console.log("Backend Response:", response);

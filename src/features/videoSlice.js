@@ -6,7 +6,7 @@ const initialState = {
   prompt_link: "", // Keep prompt_link
   edited_link: "", // Keep edited_link
   isLoading: false,
-  edit:false
+  edit: false,
 };
 
 const videoSlice = createSlice({
@@ -20,7 +20,7 @@ const videoSlice = createSlice({
       state.transcription.push(action.payload);
     },
     setTranscription(state, action) {
-      state.transcription=action.payload;
+      state.transcription = action.payload;
     },
     setPromptLink(state, action) {
       state.prompt_link = action.payload;
@@ -44,6 +44,6 @@ const videoSlice = createSlice({
   },
 });
 
-export const { setPrompt, addTranscription, setPromptLink, setEditedLink, setLoading, resetVideo,setTranscription,setEdit } = videoSlice.actions;
+export const { setPrompt, addTranscription, setPromptLink, setEditedLink, setLoading, resetVideo, setTranscription, setEdit } = videoSlice.actions;
 
 export default videoSlice.reducer;

@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Skeleton } from "./ui/skeleton";
-import { Pencil, Play } from "lucide-react";
+import { Pencil } from "lucide-react";
 import { setEdit } from "@/features/videoSlice";
 // import { formatTime } from "@/utils/common";
 
@@ -44,7 +44,6 @@ const Transcript = () => {
                             {transcript.start_time} - {transcript.end_time}
                           </div>
                           <div className="flex gap-3 items-center">
-                            <Play size={17} />
                             <Pencil size={17} onClick={() => dispatch(setEdit({ title: video.title, duration: video.duration, id: video.id, videoIndex, transcriptIndex, transcript }))} />
                           </div>
                         </div>
