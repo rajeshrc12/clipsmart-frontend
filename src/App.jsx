@@ -5,15 +5,20 @@ import { setAlert } from "./features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Button } from "./components/ui/button";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Check, Download } from "lucide-react";
 import YouTubePlaylistPlayer from "./components/YouTubePlaylistPlayer";
 import YoutubeEditPlaylistPlayer from "./components/YoutubeEditPlaylistPlayer";
+import { setEditedLink } from "./features/videoSlice";
 
 //App
 function App() {
   const dispatch = useDispatch();
   const alert = useSelector((state) => state.user.alert);
   const edit = useSelector((state) => state.video.edit);
+  const edited_link = useSelector((state) => state.video.edited_link);
+  const getFileName = (url) => {
+    return url.split("/").pop().split("?")[0]; // Extract filename from URL
+  };
   return (
     <div className="h-screen w-full flex">
       <div className="flex-0 h-full">
@@ -62,6 +67,33 @@ function App() {
                 </div>
               </AlertDialogDescription>
             </AlertDialogHeader>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
+      {!!edited_link && (
+        <AlertDialog open={!!edited_link}>
+          <AlertDialogContent className="w-96 h-72 bg-inherit border-none">
+            <AlertDialogHeader className={"!text-center"}>
+              <AlertDialogTitle className="!text-4xl !flex flex-col items-center gap-3">
+                <div>{edited_link.title.toLowerCase() === "in progress" && <Download size={50} className="animate-bounce" />}</div>
+                <div>{edited_link.title.toLowerCase() === "success" && <Check size={50} />}</div>
+                <div>{edited_link.title}!</div>
+              </AlertDialogTitle>
+              <AlertDialogDescription className="text-lg  font-semibold">{edited_link.message}</AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter className={"!flex !justify-center"}>
+              {edited_link.title.toLowerCase() === "success" && (
+                <>
+                  {" "}
+                  <Button className="" onClick={() => dispatch(setEditedLink(false))}>
+                    Cancel
+                  </Button>
+                  <a href={edited_link.link} download={getFileName(edited_link.link)} target="_blank" rel="noopener noreferrer">
+                    <Button>Download</Button>
+                  </a>
+                </>
+              )}
+            </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
       )}

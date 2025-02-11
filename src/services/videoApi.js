@@ -13,7 +13,14 @@ export const videoApi = createApi({
         };
       },
     }),
+    downloadVideo: builder.mutation({
+      query: (data) => ({
+        url: "/download",
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
-export const { useSendVideoDataMutation } = videoApi;
+export const { useSendVideoDataMutation, useDownloadVideoMutation } = videoApi;

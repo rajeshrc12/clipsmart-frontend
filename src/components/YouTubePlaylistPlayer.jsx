@@ -1,8 +1,11 @@
 import { useState, useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
-import { FastForward, Rewind, RotateCcw } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { Download, FastForward, Rewind, RotateCcw } from "lucide-react";
+import { useDownloadVideoMutation } from "@/services/videoApi";
+import { setEditedLink } from "@/features/videoSlice";
 let id;
 const YouTubePlaylistPlayer = () => {
+  const dispatch = useDispatch();
   const videos = useSelector((state) => state.video.transcription);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [currentTranscriptionIndex, setCurrentTranscriptionIndex] = useState(0);
@@ -13,7 +16,24 @@ const YouTubePlaylistPlayer = () => {
     const [hours, minutes, seconds] = duration.split(":");
     return parseInt(hours) * 3600 + parseInt(minutes) * 60 + parseInt(seconds);
   };
+  const [downloadVideo] = useDownloadVideoMutation();
+  const handleDownloadVideo = async () => {
+    try {
+      if (videos.length > 0) {
+        const vidoesFiltered = videos.map((video) => ({ id: video.id, transcription: video.transcription, title: video.title }));
+        console.log(vidoesFiltered);
+        dispatch(setEditedLink({ title: "In Progress", message: "Your video link is getting prepared, please wait..." }));
+        const response = await downloadVideo(vidoesFiltered).unwrap();
+        if (response.video_link) {
+          dispatch(setEditedLink({ title: "Success", message: "Your link is generated", link: response.video_link }));
+        }
 
+        console.log("Download response:", response);
+      }
+    } catch (err) {
+      console.error("Download error:", err);
+    }
+  };
   const loadVideo = () => {
     if (videos[currentVideoIndex]?.transcription.length > 0) {
       const video = videos[currentVideoIndex];
@@ -136,6 +156,7 @@ const YouTubePlaylistPlayer = () => {
             }
           }}
         />
+        <Download onClick={handleDownloadVideo} />
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ const initialState = {
   prompt: "",
   transcription: [],
   prompt_link: "", // Keep prompt_link
-  edited_link: "", // Keep edited_link
+  edited_link: false, // Keep edited_link
   isLoading: false,
   edit: false,
 };
