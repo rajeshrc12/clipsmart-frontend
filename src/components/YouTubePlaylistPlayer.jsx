@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Download, FastForward, Rewind, RotateCcw } from "lucide-react";
 import { useDownloadVideoMutation } from "@/services/videoApi";
 import { setEditedLink } from "@/features/videoSlice";
+import { setAlert } from "@/features/userSlice";
 let id;
 const YouTubePlaylistPlayer = () => {
   const dispatch = useDispatch();
@@ -27,7 +28,10 @@ const YouTubePlaylistPlayer = () => {
         if (response.video_link) {
           dispatch(setEditedLink({ title: "Success", message: "Your link is generated", link: response.video_link }));
         }
+        else{
+          dispatch(setAlert({ title: "Error", message: "Link generation failed"}));
 
+        }
         console.log("Download response:", response);
       }
     } catch (err) {
